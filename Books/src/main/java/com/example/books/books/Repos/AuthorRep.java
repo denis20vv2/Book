@@ -1,11 +1,19 @@
 package com.example.books.books.Repos;
 
 import com.example.books.books.domain.Author;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 
 import java.util.List;
 
-public interface AuthorRep extends CrudRepository<Author, Long> {
+@Repository
+public interface AuthorRep extends JpaRepository<Author, Long> {
 
-    List<Author> findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String firstName, String lastName);
+  //  List<Author> findByNameContainingIgnoreCase(String firstName);
+
+
+
 }

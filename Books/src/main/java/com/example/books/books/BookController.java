@@ -4,12 +4,17 @@ import com.example.books.books.Repos.AuthorRep;
 import com.example.books.books.Repos.BookRep;
 import com.example.books.books.domain.Author;
 import com.example.books.books.domain.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -23,9 +28,28 @@ public class BookController {
 
     @GetMapping
     @ResponseBody
+    //public List<Book> getBook() {return (List<Book>) dateBooks.findAll();}
     public List<Book> getBook() {
-        return (List<Book>) dateBooks.findAll();
+
+        Sort sort = Sort.by(Sort.Direction.ASC, "title");
+
+        return (List<Book>) dateBooks.findAll(sort);
     }
+
+   /* @GetMapping("/home")
+    @ResponseBody
+    public List<Book> getFirstTenBooks() {
+       Sort sort = Sort.by(Sort.Direction.ASC, "data");
+       List<Book> sortedBooks = (List<Book>) dateBooks.findAll(sort);
+       return sortedBooks.stream().limit(2).collect(Collectors.toList());
+    }
+
+   /* @GetMapping
+    @ResponseBody
+    public Page<Book> getAllTeam(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return dateBooks.Book(pageable);
+    }*/
+
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -40,10 +64,10 @@ public class BookController {
 
 
 
-    /*@PostMapping("/create")
-    public ResponseEntity<Book> createAuthor(@RequestBody Book book) {
-        Author createAuthor = dateBooks.save(book);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createAuthor);
-    }*/
+    @PostMapping
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+        Book createBook = dateBooks.save(book);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createBook);
+    }
 
 }

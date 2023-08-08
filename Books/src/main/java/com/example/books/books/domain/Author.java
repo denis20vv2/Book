@@ -1,30 +1,42 @@
 package com.example.books.books.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
-@Table(name = "author")
+@Table(name = "authors")
 public class Author {
 
+    public static class Public { }
+
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        private long id;
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private long author_id;
         private String firstName;
         private String lastName;
 
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Book> books;
+   // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    //private List<Book> books;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinTable(name = "author_book",
+            joinColumns = { @JoinColumn(name = "author_id") },
+            inverseJoinColumns = { @JoinColumn(name = "book_id") })
+    private Set<Book> Books = new HashSet<>();
 
     public long getId() {
-        return id;
+        return author_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int author_id) {this.author_id = author_id;}
 
     public String getFirstName() {
         return firstName;
@@ -43,13 +55,15 @@ public class Author {
     }
 
 
-    public List<Book> getBooks() {
-        return books;
+    public Set<Book> getBooks() {
+        return Books;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+
+    public void setBooks(Set<Book> books) {
+        this.Books = books;
     }
+
 }
 
 
