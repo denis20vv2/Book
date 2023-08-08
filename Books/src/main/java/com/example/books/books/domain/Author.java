@@ -22,15 +22,14 @@ public class Author {
         private String lastName;
 
 
-   // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    //private List<Book> books;
-
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name = "author_book",
             joinColumns = { @JoinColumn(name = "author_id") },
             inverseJoinColumns = { @JoinColumn(name = "book_id") })
+    @JsonIgnore
     private Set<Book> Books = new HashSet<>();
+
 
     public long getId() {
         return author_id;

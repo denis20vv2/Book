@@ -4,6 +4,7 @@ import com.example.books.books.Repos.AuthorRep;
 import com.example.books.books.Repos.BookRep;
 import com.example.books.books.domain.Author;
 import com.example.books.books.domain.Book;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +27,7 @@ public class BookController {
         this.dateBooks = dateBooks;
     }
 
-    @GetMapping
+    /*@GetMapping
     @ResponseBody
     //public List<Book> getBook() {return (List<Book>) dateBooks.findAll();}
     public List<Book> getBook() {
@@ -34,14 +35,27 @@ public class BookController {
         Sort sort = Sort.by(Sort.Direction.ASC, "title");
 
         return (List<Book>) dateBooks.findAll(sort);
+    }*/
+
+    @GetMapping
+    @ResponseBody
+    public List<Book> getBook() {
+        Sort sort = Sort.by(Sort.Direction.ASC, "title");
+        List<Book> books = (List<Book>) dateBooks.findAll(sort);
+
+        for (Book book : books) {
+            Hibernate.initialize(book.getAuthors()); // Инициализируем авторов (если используете Hibernate)
+        }
+
+        return books;
     }
 
-   /* @GetMapping("/home")
+    @GetMapping("/home")
     @ResponseBody
     public List<Book> getFirstTenBooks() {
        Sort sort = Sort.by(Sort.Direction.ASC, "data");
        List<Book> sortedBooks = (List<Book>) dateBooks.findAll(sort);
-       return sortedBooks.stream().limit(2).collect(Collectors.toList());
+       return sortedBooks.stream().limit(10).collect(Collectors.toList());
     }
 
    /* @GetMapping

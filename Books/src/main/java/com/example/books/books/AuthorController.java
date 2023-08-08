@@ -29,7 +29,7 @@ public class AuthorController {
         this.service = service;
     }
 
-   /* @GetMapping
+    @GetMapping
     @ResponseBody
        // public List<Author> getAuthors() {return (List<Author>) dataAuthors.findAll();}
     public List<Author> getBook() {
@@ -37,13 +37,13 @@ public class AuthorController {
         Sort sort = Sort.by(Sort.Direction.ASC, "firstName");
         // Получаем отсортированный список книг
         return (List<Author>) dataAuthors.findAll(sort);
-    }*/
-
-    @GetMapping
-    @ResponseBody
-    public Page<AuthorView> getAllTournament(@PageableDefault(sort = "author_id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return service.findAllTournament(pageable);
     }
+
+    /*@GetMapping
+    @ResponseBody
+    public Page<AuthorView> getAllTournament(@PageableDefault(sort = "firstName", direction = Sort.Direction.ASC) Pageable pageable) {
+        return service.findAllTournament(pageable);
+    }*/
 
 
 
@@ -66,9 +66,10 @@ public class AuthorController {
             }
         }
 
-       /* @GetMapping("/firstName")
-        public ResponseEntity<List<Author>> getAuthorsByFirstName(@RequestBody  String Name) {
-            List<Author> authors = dataAuthors.findByNameContainingIgnoreCase(Name);
+    @GetMapping("/search")
+       @ResponseBody
+        public ResponseEntity<List<Author>> searchAuthorsByFirstName(@RequestParam  String firstName) {
+            List<Author> authors = dataAuthors.findByFirstName(firstName);
             if (!authors.isEmpty()) {
                 return ResponseEntity.ok(authors);
             } else {
