@@ -1,6 +1,8 @@
 package com.example.books.books.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.xml.crypto.Data;
@@ -12,6 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "books")
 public class Book {
+
+    public static class Public { }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long book_id;
@@ -19,34 +23,14 @@ public class Book {
 
     private Date data;
 
-    @ManyToMany(mappedBy = "Books")
-    @JsonIgnore
+
+    @ManyToMany(mappedBy= "Books")
+    @JsonIgnoreProperties("books")
     private Set<Author> authors;
 
-   /* @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JoinTable(name = "AuthorBook",
-            joinColumns = {@JoinColumn(name = "book_id")},
-            inverseJoinColumns = {@JoinColumn(name = "author_id")})*/
-    //private Set<Author> Authors = new HashSet<>();
-
-    //private Date Created;
-
-   /* @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Author Author;
-
-    public book() {
-        this.timeCreated = new Date();
-    }*/
-
-    public Book() {
-
-    }
-
-    public Book(Set<Author> authors) {
-        this.authors = authors;
-    }
-
+   public Book() {
+       this.data = new Date();
+   }
     public Book(long book_id, String title, Date data){
         this.book_id=book_id ;
         this.title=title;
@@ -58,7 +42,7 @@ public class Book {
         return data;
     }
 
-    public void setData(Date data) {
+   public void setData(Date data) {
         this.data = data;
     }
 
@@ -79,10 +63,10 @@ public class Book {
         this.title = title;
     }
 
-
     public Set<Author> getAuthors() {
         return authors;
     }
+
 
     public void setAuthors(Set<Author> authors) {
         this.authors = authors;

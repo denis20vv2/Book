@@ -1,6 +1,8 @@
 package com.example.books.books.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,8 +29,8 @@ public class Author {
     @JoinTable(name = "author_book",
             joinColumns = { @JoinColumn(name = "author_id") },
             inverseJoinColumns = { @JoinColumn(name = "book_id") })
-    @JsonIgnore
-    private Set<Book> Books = new HashSet<>();
+
+    private Set<Book> Books;
 
 
     public long getId() {

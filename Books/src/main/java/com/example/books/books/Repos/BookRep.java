@@ -14,7 +14,5 @@ import java.util.List;
 @Repository
 public interface BookRep extends JpaRepository<Book, Long> {
 
-
-    // List<Book> getBookById(long book_id);
-
+    List<Book> findByTitle(String title);
 }

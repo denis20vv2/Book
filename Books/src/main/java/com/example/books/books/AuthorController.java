@@ -20,13 +20,13 @@ public class AuthorController {
 
         private final AuthorRep dataAuthors;
 
-    private final AuthorService service;
 
 
 
-    public AuthorController(AuthorRep dataAuthors, AuthorService service) {
+
+    public AuthorController(AuthorRep dataAuthors) {
         this.dataAuthors = dataAuthors;
-        this.service = service;
+
     }
 
     @GetMapping
@@ -39,22 +39,11 @@ public class AuthorController {
         return (List<Author>) dataAuthors.findAll(sort);
     }
 
-    /*@GetMapping
-    @ResponseBody
-    public Page<AuthorView> getAllTournament(@PageableDefault(sort = "firstName", direction = Sort.Direction.ASC) Pageable pageable) {
-        return service.findAllTournament(pageable);
-    }*/
 
 
 
-    /*public Page<Author> getAllTeam(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return service.findAllTeam(pageable);
 
-   /* @GetMapping
-    @ResponseBody
-    public Page<Author> getAllTournament(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return dataAuthors.Author(pageable);*/
-
+        //Поиск автора по ID
         @GetMapping("/{id}")
         @ResponseBody
         public ResponseEntity<Author> getAuthorById(@PathVariable long id) {
@@ -66,6 +55,8 @@ public class AuthorController {
             }
         }
 
+    //Поиск автора по имени
+    // http://localhost:8080/author/search?firstName= 'Имя автора'
     @GetMapping("/search")
        @ResponseBody
         public ResponseEntity<List<Author>> searchAuthorsByFirstName(@RequestParam  String firstName) {
@@ -77,28 +68,13 @@ public class AuthorController {
             }
         }
 
-   /* @GetMapping("/search")
-    public Page<Author> getAuthorsByFirstName(
-            @RequestParam("Name") String Name,
-            Pageable pageable) {
-
-            return (Page<Author>) dataAuthors.getAuthorsByFirstName(Name);
-        }*/
-
-
-
+// Создание нового автора
         @PostMapping
        public ResponseEntity<Author> createAuthor(@RequestBody Author authors) {
             Author createAuthor = dataAuthors.save(authors);
             return ResponseEntity.status(HttpStatus.CREATED).body(createAuthor);
         }
 
-   /* @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public Author create(@RequestBody @Valid Author req) {
-        return dataAuthors.save(req);
-    }*/
 
 
         @DeleteMapping("/delete")

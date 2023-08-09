@@ -27,29 +27,16 @@ public class BookController {
         this.dateBooks = dateBooks;
     }
 
-    /*@GetMapping
-    @ResponseBody
-    //public List<Book> getBook() {return (List<Book>) dateBooks.findAll();}
-    public List<Book> getBook() {
-
-        Sort sort = Sort.by(Sort.Direction.ASC, "title");
-
-        return (List<Book>) dateBooks.findAll(sort);
-    }*/
-
     @GetMapping
     @ResponseBody
     public List<Book> getBook() {
         Sort sort = Sort.by(Sort.Direction.ASC, "title");
         List<Book> books = (List<Book>) dateBooks.findAll(sort);
+        return (List<Book>) dateBooks.findAll(sort);
 
-        for (Book book : books) {
-            Hibernate.initialize(book.getAuthors()); // Инициализируем авторов (если используете Hibernate)
-        }
-
-        return books;
     }
 
+ //Домашняя страница
     @GetMapping("/home")
     @ResponseBody
     public List<Book> getFirstTenBooks() {
@@ -58,13 +45,9 @@ public class BookController {
        return sortedBooks.stream().limit(10).collect(Collectors.toList());
     }
 
-   /* @GetMapping
-    @ResponseBody
-    public Page<Book> getAllTeam(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-        return dateBooks.Book(pageable);
-    }*/
 
 
+//Поиск книги по ID
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Book> getBookById(@PathVariable long id) {
@@ -76,7 +59,18 @@ public class BookController {
         }
     }
 
-
+    //Поиск книги по Имени
+    // http://localhost:8080/author/search?title= 'Название книги'
+    @GetMapping("/search")
+    @ResponseBody
+    public ResponseEntity<List<Book>> searchAuthorsByFirstName(@RequestParam  String title) {
+        List<Book> books = dateBooks.findByTitle(title);
+        if (!books.isEmpty()) {
+            return ResponseEntity.ok(books);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
